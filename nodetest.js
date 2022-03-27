@@ -10,4 +10,7 @@ http.createServer(function (req, res) {
 }).listen(8080);
 console.log("Server running, press ctrl-c to exit");
 setTimeout(function () {
-    console.log("20 seconds passed")},10000);
+    console.log("2 minutes passed");
+    console.log("Server stopped");
+    process.exit();
+    },120000);
