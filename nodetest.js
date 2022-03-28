@@ -1,4 +1,4 @@
-var http = require("http");
+const http = require("http");
 const { exec } = require("child_process");
 
 let counter = 0;
