@@ -1,12 +1,17 @@
-const { lstat } = require("fs");
 const http = require("http");
+const file = require("fs");
 const fileName1 = "form.html";
 const fileName2 = "dogs.json";
 
+var dogs = [];
+
 http
   .createServer(function (req, res) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end("Hello World!     ");
+    file.readFile("form.html", function (err, data) {
+      res.res.writeHead(200, { "Content-Type": "text/html" });
+      res.write(data);
+      res.end("Hello World!     ");
+    });
   })
   .listen(8080);
 
