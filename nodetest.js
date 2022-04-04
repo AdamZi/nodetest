@@ -2,18 +2,24 @@ const http = require("http");
 const file = require("fs");
 const fileName1 = "form.html";
 const fileName2 = "dogs.json";
-//var url1 = require("url");
-var dogs = []; //require(fileName2);
+
+function Dog(name, birth) {
+  this.name = name;
+  this.birth = birth;
+  this.getAge = function () {
+    return Math.floor((Date.now() - Date.parse(birth)) / 31556952000);
+  };
+}
+
+var dogs = [];
+
 try {
-  dogs = JSON.parse(file.readFileSync(fileName2, "utf8"));
+  JSON.parse(file.readFileSync(fileName2, "utf8")).forEach((dog) => {
+    dogs.push(new Dog(dog.name, dog.birth));
+  });
 } catch (err) {
   console.log(`Error reading file from disk: ${err}`);
 }
-dogs.forEach((dog) => {
-  dog.dogAge = function () {
-    return Math.floor((Date.now() - Date.parse(dog.birth)) / 31556952000);
-  };
-});
 
 http
   .createServer(function (req, res) {
@@ -43,9 +49,23 @@ http
       });
       // console.log(q.query);
     }
+
+    res.write("aaa");
+    //   <table>
+    //    <tr>
+    //        <th>Imię</th>
+    //        <th>Data urodzenia</th>
+    //        <th>Wiek</th>
+    //     </tr>
+    //  ');
+
     dogs.forEach((dog) => {
       //    var age = dog.dogAge();
-      res.write(`imię: ${dog.name}, data urodzenia: ${dog.birth}<br>`);
+      res.write(
+        `imię: ${dog.name}, data urodzenia: ${
+          dog.birth
+        }, wiek ${dog.getAge()}<br>`
+      );
     });
     res.end();
   })
