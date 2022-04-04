@@ -38,36 +38,26 @@ http
     res.writeHead(200, { "Content-Type": "text/html" });
     res.write(data);
     if ("name" in q.query || "birth" in q.query) {
-      dogs.unshift(q.query);
-      //  dogs[0].dogAge = function () {
-      //  return Math.floor((Date.now() - Date.parse(dog.birth)) / 31556952000);
-      // };
+      dogs.unshift(new Dog(q.query.name, q.query.birth));
       file.writeFile(fileName2, JSON.stringify(dogs, null, 4), (err) => {
         if (err) {
           console.log(`Error writing file: ${err}`);
         }
       });
-      // console.log(q.query);
     }
 
-    res.write("aaa");
-    //   <table>
-    //    <tr>
-    //        <th>Imię</th>
-    //        <th>Data urodzenia</th>
-    //        <th>Wiek</th>
-    //     </tr>
-    //  ');
+    res.write(
+      "<table><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
+    );
 
     dogs.forEach((dog) => {
-      //    var age = dog.dogAge();
       res.write(
-        `imię: ${dog.name}, data urodzenia: ${
+        `<tr><td> ${dog.name} </td><td> ${
           dog.birth
-        }, wiek ${dog.getAge()}<br>`
+        } </td><td> ${dog.getAge()}</td></tr>`
       );
     });
-    res.end();
+    res.end("</table>");
   })
   .listen(8080);
 
