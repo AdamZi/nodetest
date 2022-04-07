@@ -45,7 +45,6 @@ http
         }
       });
     }
-
     res.write(
       "<table><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
     );

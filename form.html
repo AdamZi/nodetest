@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<script>
+  function clearUrl() {
+    var uri = window.location.toString();
+    if (uri.indexOf("?") > 0) {
+      var clean_uri = uri.substring(0, uri.indexOf("?"));
+      window.history.replaceState({}, document.title, clean_uri);
+    }
+  }
+</script>
+
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psy</title>
   </head>
-  <body>
+  <body onload="clearUrl()">
     <h2>Dodaj psa</h2>
     <form>
       <label for="name">Imię psa:</label><br />
