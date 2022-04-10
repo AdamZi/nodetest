@@ -61,8 +61,8 @@ http
   .listen(8080);
 
 console.log("Server running, press ctrl-c to exit");
-setTimeout(function () {
+/*setTimeout(function () {
   console.log("2 minutes passed");
   console.log("Server stopped");
   process.exit();
-}, 120000);
+}, 120000);*/
