@@ -49,12 +49,15 @@ http
       "<table><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
     );
 
-    dogs.forEach((dog) => {
-      res.write(
-        `<tr><td> ${dog.name} </td><td> ${
-          dog.birth
-        } </td><td> ${dog.getAge()}</td></tr>`
-      );
+    
+    dogs
+      .filter(dog => {return dog.name})
+      .forEach((dog) => {
+        res.write(
+          `<tr class="dog"><td class="dog-name"> ${dog.name} </td><td class="dog-birth"> ${
+            dog.birth
+          } </td><td class="dog-age"> ${dog.getAge()}</td></tr>`
+        );
     });
     res.end("</table>");
   })
