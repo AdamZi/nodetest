@@ -68,7 +68,7 @@ http
       .filter(dog => {return dog.name})
       .forEach((dog) => {
         res.write(
-          `<tr><td class="dog-name"> ${dog.name} </td><td class="dog-birth"> ${
+          `<tr class="dog-tr"><td class="dog-name"> ${dog.name} </td><td class="dog-birth"> ${
             dog.birth
           } </td><td class="dog-age"> ${dog.getAge()}</td></tr>`
         );
