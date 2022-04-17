@@ -1,7 +1,8 @@
 const http = require("http");
 const file = require("fs");
-const fileName1 = "form.html";
-const fileName2 = "dogs.json";
+const fileForm = "form.html";
+const fileData = "dogs.json";
+const fileCss = "style.css"
 
 function Dog(name, birth) {
   this.name = name;
@@ -12,9 +13,10 @@ function Dog(name, birth) {
 }
 
 var dogs = [];
+let style_number = 0;
 
 try {
-  JSON.parse(file.readFileSync(fileName2, "utf8")).forEach((dog) => {
+  JSON.parse(file.readFileSync(fileData, "utf8")).forEach((dog) => {
     dogs.push(new Dog(dog.name, dog.birth));
   });
 } catch (err) {
@@ -30,8 +32,22 @@ http
       // console.log('favicon');
       return;
     }
+  if (req.url === '/'+fileCss) {
+      style_number++;
+      console.log(req.url+' '+style_number);
+      try {
+        data = file.readFileSync(fileCss, "utf8");
+      } catch (err) {
+        console.log(`Error reading file from disk: ${err}`);
+      }
+      res.writeHead(200, { "Content-Type": "text/css" });
+      res.write(data);
+      res.end();
+      return;
+    }
+    
     try {
-      data = file.readFileSync(fileName1, "utf8");
+      data = file.readFileSync(fileForm, "utf8");
     } catch (err) {
       console.log(`Error reading file from disk: ${err}`);
     }
@@ -39,22 +55,20 @@ http
     res.write(data);
     if ("name" in q.query || "birth" in q.query) {
       dogs.unshift(new Dog(q.query.name, q.query.birth));
-      file.writeFile(fileName2, JSON.stringify(dogs, null, 4), (err) => {
+      file.writeFile(fileData, JSON.stringify(dogs, null, 4), (err) => {
         if (err) {
           console.log(`Error writing file: ${err}`);
         }
       });
     }
     res.write(
-      "<table><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
+      "<table class='dog'><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
     );
-
-    
     dogs
       .filter(dog => {return dog.name})
       .forEach((dog) => {
         res.write(
-          `<tr class="dog"><td class="dog-name"> ${dog.name} </td><td class="dog-birth"> ${
+          `<tr><td class="dog-name"> ${dog.name} </td><td class="dog-birth"> ${
             dog.birth
           } </td><td class="dog-age"> ${dog.getAge()}</td></tr>`
         );
