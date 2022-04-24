@@ -16,7 +16,7 @@ var dogs = [];
 let style_number = 0;
 
 try {
-  JSON.parse(file.readFileSync(fileData, "utf8")).forEach((dog) => {
+  JSON.parse(file.readFileSync(fileData, "utf8")).forEach( (dog) => {
     dogs.push(new Dog(dog.name, dog.birth));
   });
 } catch (err) {
@@ -53,14 +53,14 @@ http
     }
     res.writeHead(200, { "Content-Type": "text/html" });
     res.write(data);
-    if ("name" in q.query || "birth" in q.query) {
+    if (("name" in q.query || "birth" in q.query) && (q.query.name)) {
       dogs.unshift(new Dog(q.query.name, q.query.birth));
       file.writeFile(fileData, JSON.stringify(dogs, null, 4), (err) => {
         if (err) {
           console.log(`Error writing file: ${err}`);
         }
       });
-    }
+    } 
     res.write(
       "<table class='dog'><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
     );
@@ -73,7 +73,7 @@ http
           } </td><td class="dog-age"> ${dog.getAge()}</td></tr>`
         );
     });
-    res.end("</table>");
+    res.end("</table>"); 
   })
   .listen(8080);
 
