@@ -5,6 +5,7 @@
     "testcafe": "^1.18.5"
   },
   "scripts": {
-    "test": "testcafe chrome test/test.js"
+    "test": "testcafe chrome test/test.js",
+    "start": "node nodetest.js"
   }
 }
