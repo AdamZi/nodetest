@@ -75,9 +75,9 @@ http
     });
     res.end("</table>"); 
   })
-  .listen(8080);
+  .listen(process.env.PORT || "8080");
 
-console.log("Server running, press ctrl-c to exit");
+console.log(`Server running on port ${process.env.PORT || "8080"}, press ctrl-c to exit`);
 /*setTimeout(function () {
   console.log("2 minutes passed");
   console.log("Server stopped");
