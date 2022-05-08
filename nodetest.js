@@ -1,20 +1,23 @@
 const http = require("http");
 const file = require("fs");
-const fileForm = "form.html";
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
 const fileData = "dogs.json";
-const fileCss = "style.css";
+const publicDirName = "public";
 const myPort = process.env.PORT || 8080;
 
-function Dog(name, birth) {
-  this.name = name;
-  this.birth = birth;
-  this.getAge = function () {
-    return Math.floor((Date.now() - Date.parse(birth)) / 31556952000);
-  };
+class Dog {
+  constructor(name, birth) {
+    this.name = name;
+    this.birth = birth || "unknown";
+  }
+  getAge() {
+    return Math.floor((Date.now() - Date.parse(this.birth)) / 31556952000);
+  }
 }
 
 var dogs = [];
-let style_number = 0;
 
 try {
   JSON.parse(file.readFileSync(fileData, "utf8")).forEach(dog => {
@@ -23,70 +26,33 @@ try {
 } catch (err) {
   console.log(`Error reading file from disk: ${err}`);
 }
+app.use(express.static(__dirname + "/" + publicDirName));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-http
-  .createServer(function (req, res) {
-    var url1 = require("url");
-    var q = url1.parse(req.url, true);
-    var data;
-    if (req.url === "/favicon.ico") {
-      // console.log('favicon');
-      return;
-    }
-    if (req.url === "/" + fileCss) {
-      style_number++;
-      console.log(req.url + " " + style_number);
-      try {
-        data = file.readFileSync(fileCss, "utf8");
-      } catch (err) {
-        console.log(`Error reading file from disk: ${err}`);
+app.get("/api/dogs", (req, res) => {
+  res.json(
+    dogs.map(dog => {
+      return (dog = { name: dog.name, birth: dog.birth, age: dog.getAge() });
+    })
+  );
+});
+
+app.get("/api/dogs/:name", (req, res) => {
+  res.json(dogs.filter(dog => dog.name === req.params.name));
+});
+app.listen(myPort);
+
+app.post("/add", (req, res) => {
+  console.log(req.body);
+  console.log(req.headers);
+  res.end();
+  if (req.body.name && req.body.birth) {
+    dogs.unshift(new Dog(req.body.name, req.body.birth));
+    file.writeFile(fileData, JSON.stringify(dogs, null, 4), err => {
+      if (err) {
+        console.log(`Error writing file: ${err}`);
       }
-      res.writeHead(200, { "Content-Type": "text/css" });
-      res.write(data);
-      res.end();
-      return;
-    }
-
-    try {
-      data = file.readFileSync(fileForm, "utf8");
-    } catch (err) {
-      console.log(`Error reading file from disk: ${err}`);
-    }
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write(data);
-    if (("name" in q.query || "birth" in q.query) && q.query.name) {
-      dogs.unshift(new Dog(q.query.name, q.query.birth));
-      file.writeFile(fileData, JSON.stringify(dogs, null, 4), err => {
-        if (err) {
-          console.log(`Error writing file: ${err}`);
-        }
-      });
-    }
-    res.write(
-      "<table class='dog'><tr><th>Imię</th><th>Data urodzenia</th><th>Wiek</th></tr>"
-    );
-    dogs
-      .filter(dog => {
-        return dog.name;
-      })
-      .forEach(dog => {
-        res.write(
-          `<tr class="dog-tr"><td class="dog-name"> ${
-            dog.name
-          } </td><td class="dog-birth"> ${
-            dog.birth
-          } </td><td class="dog-age"> ${dog.getAge()}</td></tr>`
-        );
-      });
-    res.end("</table>");
-  })
-  .listen(myPort);
-
-console.log(
-  `Server running on port ${process.env.PORT || 8080}, press ctrl-c to exit`
-);
-/*setTimeout(function () {
-  console.log("2 minutes passed");
-  console.log("Server stopped");
-  process.exit();
-}, 120000);*/
+    });
+  }
+});

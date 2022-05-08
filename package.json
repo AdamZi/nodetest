@@ -6,6 +6,10 @@
   },
   "scripts": {
     "test": "testcafe chrome test/test.js",
-    "start": "node nodetest.js"
+    "start": "node nodetest.js",
+    "dev": "nodemon --inspect nodetest.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
