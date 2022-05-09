@@ -3,6 +3,7 @@ const file = require("fs");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const { nextTick } = require("process");
 const fileData = "dogs.json";
 const publicDirName = "public";
 const myPort = process.env.PORT || 8080;
@@ -30,29 +31,43 @@ app.use(express.static(__dirname + "/" + publicDirName));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/api/dogs", (req, res) => {
+function sendJsonDogs(req, res) {
   res.json(
     dogs.map(dog => {
-      return (dog = { name: dog.name, birth: dog.birth, age: dog.getAge() });
+      return { name: dog.name, birth: dog.birth, age: dog.getAge() };
     })
   );
-});
+}
+
+app.get("/api/dogs", sendJsonDogs);
 
 app.get("/api/dogs/:name", (req, res) => {
   res.json(dogs.filter(dog => dog.name === req.params.name));
 });
-app.listen(myPort);
 
-app.post("/add", (req, res) => {
-  console.log(req.body);
-  console.log(req.headers);
-  res.end();
-  if (req.body.name && req.body.birth) {
+app.post(
+  "/add",
+  (req, res, next) => {
+    if (!req.body.name || !req.body.birth) {
+      res.json({
+        error: "provide data",
+      });
+      return;
+    }
     dogs.unshift(new Dog(req.body.name, req.body.birth));
     file.writeFile(fileData, JSON.stringify(dogs, null, 4), err => {
       if (err) {
         console.log(`Error writing file: ${err}`);
       }
     });
-  }
-});
+    next();
+    // res.json(
+    //   dogs.map(dog => {
+    //     return { name: dog.name, birth: dog.birth, age: dog.getAge() };
+    //   })
+    // );
+  },
+  sendJsonDogs
+);
+
+app.listen(myPort);

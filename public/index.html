@@ -8,18 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psy</title>
   </head>
-
-  <script>
-    function clearUrl() {
-      //   var uri = window.location.toString();
-      //   if (uri.indexOf("?") > 0) {
-      //     var clean_uri = uri.substring(0, uri.indexOf("?"));
-      //     window.history.replaceState({}, document.title, clean_uri);
-      //   }
-    }
-  </script>
-
-  <body onload="clearUrl()">
+  <body>
     <div class="flex-container">
       <div class="form-container">
         <h2>Dodaj psa</h2>
@@ -34,34 +23,35 @@
       <div class="dogs-container"></div>
     </div>
     <script>
-      function loadDogs() {
-        fetch("/api/dogs")
-          .then(response => response.json())
-          .then(dogs => {
-            const existingTable = document.querySelector(".dog");
-            if (existingTable) existingTable.remove();
-            const table = document.createElement("table");
-            table.classList.add("dog");
-            const container = document.querySelector(".dogs-container");
-            container.appendChild(table);
-            table.innerHTML = `
+      function showDogs(dogs) {
+        const existingTable = document.querySelector(".dog");
+        if (existingTable) existingTable.remove();
+        const table = document.createElement("table");
+        table.classList.add("dog");
+        const container = document.querySelector(".dogs-container");
+        container.appendChild(table);
+        table.innerHTML = `
                   <tr>
                     <th>Imię</th><th>Data urodzenia</th><th>Wiek</th>
                   </tr>`;
-            dogs.forEach(dog => {
-              const row = document.createElement("tr");
-              const td1 = document.createElement("td");
-              const td2 = document.createElement("td");
-              const td3 = document.createElement("td");
-              td1.textContent = dog.name;
-              td2.textContent = dog.birth;
-              td3.textContent = dog.age;
-              table.appendChild(row);
-              row.appendChild(td1);
-              row.appendChild(td2);
-              row.appendChild(td3);
-            });
-          });
+        dogs.forEach(dog => {
+          const row = document.createElement("tr");
+          const td1 = document.createElement("td");
+          const td2 = document.createElement("td");
+          const td3 = document.createElement("td");
+          td1.textContent = dog.name;
+          td2.textContent = dog.birth;
+          td3.textContent = dog.age;
+          table.appendChild(row);
+          row.appendChild(td1);
+          row.appendChild(td2);
+          row.appendChild(td3);
+        });
+      }
+      function loadDogs() {
+        fetch("/api/dogs")
+          .then(response => response.json())
+          .then(showDogs);
       }
       function sendDog(event) {
         event.preventDefault();
@@ -77,7 +67,9 @@
             "Content-type": "application/json",
           },
           body: jsonDog,
-        }).then(loadDogs());
+        })
+          .then(response => response.json())
+          .then(showDogs);
       }
 
       loadDogs();
