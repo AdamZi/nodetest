@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psy</title>
+  </head>
+
+  <body onload="clearUrl()">
+    <div class="flex-container">
+      <div class="form-container">
+        <h2>Dodaj psa</h2>
+        <form class="input-form" action="api/dogs/add" method="POST">
+          <label for="name">Imię psa:</label><br />
+          <input type="text" class="input-name" name="name" /><br />
+          <label for="birth">Data urodzenia:</label><br />
+          <input type="text" class="input-birth" name="birth" /><br /><br />
+          <input type="submit" class="input-btn" value="Dodaj" />
+        </form>
+      </div>
+      <div class="dogs-container"></div>
+    </div>
+    <script>
+      function renderDogs() {}
+      function loadDogs() {
+        fetch('/api/dogs')
+          .then((response) => response.json())
+          .then((dogs) => {
+            const existingTable = document.querySelector('.dog');
+            if (existingTable) existingTable.remove();
+            const table = document.createElement('table');
+            table.classList.add('dog');
+            const container = document.querySelector('.dogs-container');
+            container.appendChild(table);
+            table.innerHTML = `
+                  <tr>
+                    <th>Imię</th><th>Data urodzenia</th><th>Wiek</th>
+                  </tr>`;
+            dogs.forEach((dog) => {
+              const row = document.createElement('tr');
+              const td1 = document.createElement('td');
+              const td2 = document.createElement('td');
+              const td3 = document.createElement('td');
+              td1.textContent = dog.name;
+              td2.textContent = dog.birth;
+              td3.textContent = dog.age;
+              table.appendChild(row);
+              row.appendChild(td1);
+              row.appendChild(td2);
+              row.appendChild(td3);
+            });
+          });
+      }
+      function sendDog(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const url = form.action;
+        const dog = new FormData(form);
+        const jsonDog = JSON.stringify(Object.fromEntries(dog.entries()));
+        form.reset();
+        console.log(jsonDog);
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: jsonDog,
+        }).then(loadDogs());
+      }
+
+      loadDogs();
+      const inputForm = document.querySelector('.input-form');
+      inputForm.addEventListener('submit', sendDog);
+    </script>
+  </body>
+</html>

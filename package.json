@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "testcafe": "^1.18.5"
+  },
+  "scripts": {
+    "test": "testcafe chrome --app \"node server/index.js\" test/test.js"
+  }
+}
