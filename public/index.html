@@ -8,10 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psy</title>
   </head>
-<<<<<<< HEAD
-=======
-
->>>>>>> refactor
   <body>
     <div class="flex-container">
       <div class="form-container">
@@ -27,11 +23,7 @@
       <div class="dogs-container"></div>
     </div>
     <script>
-<<<<<<< HEAD
-      function showDogs(dogs) {
-=======
       function renderDogs(dogs) {
->>>>>>> refactor
         const existingTable = document.querySelector(".dog");
         if (existingTable) existingTable.remove();
         const table = document.createElement("table");
@@ -55,14 +47,6 @@
           row.appendChild(td2);
           row.appendChild(td3);
         });
-<<<<<<< HEAD
-      }
-      function loadDogs() {
-        fetch("/api/dogs")
-          .then(response => response.json())
-          .then(showDogs);
-=======
->>>>>>> refactor
       }
 
       function loadDogs() {
@@ -87,11 +71,7 @@
           body: jsonDog,
         })
           .then(response => response.json())
-<<<<<<< HEAD
-          .then(showDogs);
-=======
           .then(renderDogs);
->>>>>>> refactor
       }
 
       loadDogs();
