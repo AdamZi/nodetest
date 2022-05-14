@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.17.3",
+    "path": "^0.12.7"
+  },
+  "scripts": {
+    "test": "testcafe chrome test/test.js",
+    "start": "node index.js",
+    "dev": "nodemon --inspect index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

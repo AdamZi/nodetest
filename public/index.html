@@ -8,11 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psy</title>
   </head>
+<<<<<<< HEAD
+=======
+
+>>>>>>> refactor
   <body>
     <div class="flex-container">
       <div class="form-container">
         <h2>Dodaj psa</h2>
-        <form class="input-form" action="/add" method="POST">
+        <form class="input-form" action="api/dogs/add" method="POST">
           <label for="name">Imię psa:</label><br />
           <input type="text" class="input-name" name="name" /><br />
           <label for="birth">Data urodzenia:</label><br />
@@ -23,7 +27,11 @@
       <div class="dogs-container"></div>
     </div>
     <script>
+<<<<<<< HEAD
       function showDogs(dogs) {
+=======
+      function renderDogs(dogs) {
+>>>>>>> refactor
         const existingTable = document.querySelector(".dog");
         if (existingTable) existingTable.remove();
         const table = document.createElement("table");
@@ -47,12 +55,22 @@
           row.appendChild(td2);
           row.appendChild(td3);
         });
+<<<<<<< HEAD
       }
       function loadDogs() {
         fetch("/api/dogs")
           .then(response => response.json())
           .then(showDogs);
+=======
+>>>>>>> refactor
       }
+
+      function loadDogs() {
+        fetch("/api/dogs")
+          .then(response => response.json())
+          .then(renderDogs);
+      }
+
       function sendDog(event) {
         event.preventDefault();
         const form = event.currentTarget;
@@ -69,7 +87,11 @@
           body: jsonDog,
         })
           .then(response => response.json())
+<<<<<<< HEAD
           .then(showDogs);
+=======
+          .then(renderDogs);
+>>>>>>> refactor
       }
 
       loadDogs();
