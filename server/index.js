@@ -5,8 +5,9 @@ const bodyParser = require("body-parser");
 const publicDirName = "public";
 const api = require("./routes");
 const { readDogs } = require("./db");
-readDogs();
 const myPort = process.env.PORT || 8080;
+
+readDogs();
 
 app.use(express.static(path.resolve(__dirname, "../", publicDirName)));
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -26,7 +26,7 @@ router.post(
       });
       return;
     }
-    const dogs = saveDog(new Dog(req.body.name, req.body.birth));
+    saveDog(new Dog(req.body.name, req.body.birth));
     next();
   },
   sendJsonDogs

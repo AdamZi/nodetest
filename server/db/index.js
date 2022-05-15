@@ -27,15 +27,12 @@ const getDogs = () => {
 };
 
 const saveDog = dog => {
-  // const dogs = getDogs();
   dogs.unshift(dog);
-  //file.writeFileSync(fileData, JSON.stringify(dogs, null, 4));
   file.writeFile(fileData, JSON.stringify(dogs, null, 4), err => {
     if (err) {
       console.log(`Error writing file: ${err}`);
     }
   });
-  return dogs;
 };
 
 module.exports = {
