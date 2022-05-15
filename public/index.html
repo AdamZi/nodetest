@@ -71,7 +71,13 @@
           body: jsonDog,
         })
           .then(response => response.json())
-          .then(renderDogs);
+          .then(response => {
+            if (response.error) {
+              console.log("Error: " + response.error);
+              return;
+            }
+            renderDogs(response);
+          });
       }
 
       loadDogs();
