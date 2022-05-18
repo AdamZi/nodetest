@@ -1,6 +1,6 @@
 const file = require("fs");
 const path = require("path");
-const fileData = path.resolve(__dirname, "../", "db", "data", "dogs.json");
+const fileData = path.resolve(__dirname, "data", "dogs.json");
 const Dog = require("../models/Dog");
 
 const dogs = [];
