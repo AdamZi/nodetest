@@ -6,7 +6,7 @@
   },
   "scripts": {
     "test": "testcafe chrome test/test.js",
-    "start": "node server/index.js",
+    "start": "nodemon server/index.js",
     "dev": "nodemon --inspect server/index.js"
   },
   "devDependencies": {
