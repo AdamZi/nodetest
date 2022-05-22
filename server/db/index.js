@@ -1,35 +1,29 @@
-const file = require("fs");
-const path = require("path");
-const dataFileName = path.resolve(__dirname, "data", "dogs.json");
-const Dog = require("../models/Dog");
+const fs = require('fs');
+const path = require('path');
+const fileDir = path.resolve(__dirname, 'data');
+const filePath = path.resolve(fileDir, 'dogs.json');
+const Dog = require('../models/Dog');
 
-const dogs = [];
+if (!fs.existsSync(filePath)) {
+  fs.mkdirSync(fileDir);
+  fs.writeFileSync(filePath, '[]');
+}
 
-function readDogs() {
+const readDogs = () => {
   try {
-    console.log(__dirname);
-    JSON.parse(file.readFileSync(dataFileName, "utf8")).forEach(dog => {
-      dogs.push(new Dog(dog.name, dog.birth));
+    return JSON.parse(fs.readFileSync(filePath, 'utf8')).map((dog) => {
+      return new Dog(dog.name, dog.birth);
     });
   } catch (err) {
     console.log(`Error reading file from disk: ${err}`);
+    return [];
   }
-}
-
-const getDogs = () => {
-  // try {
-  //   return JSON.parse(file.readFileSync("./data/"+dataFileName)).map(dog => {
-  //     return new Dog(dog.name, dog.birth);
-  //   });
-  // } catch (err) {
-  //   console.log(`Error reading file from disk: ${err} ${dataFileName}`);
-  // }
-  return dogs;
 };
 
-const saveDog = dog => {
-  dogs.unshift(dog);
-  file.writeFile(dataFileName, JSON.stringify(dogs, null, 4), err => {
+const saveDog = (dog) => {
+  const dogs = [dog, ...readDogs()].map((dog) => dog.toJSON());
+
+  fs.writeFileSync(filePath, JSON.stringify(dogs, null, 4), (err) => {
     if (err) {
       console.log(`Error writing file: ${err}`);
     }
@@ -43,7 +37,6 @@ const saveDog = dog => {
 // });
 
 module.exports = {
-  getDogs,
   saveDog,
   readDogs,
 };

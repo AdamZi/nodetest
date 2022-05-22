@@ -6,4 +6,13 @@ module.exports = class Dog {
   getAge() {
     return Math.floor((Date.now() - Date.parse(this.birth)) / 31556952000);
   }
+
+  toJSON() {
+    const { name, birth } = this;
+    return {
+      name,
+      birth,
+      age: this.getAge(),
+    };
+  }
 };
