@@ -5,11 +5,13 @@
     "path": "^0.12.7"
   },
   "scripts": {
-    "test": "testcafe chrome test/test.js",
+    "e2e": "testcafe chrome test/test.js",
     "start": "node index.js",
-    "dev": "nodemon --inspect index.js"
+    "dev": "nodemon --inspect index.js",
+    "test": "jest"
   },
   "devDependencies": {
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16"
   }
 }
